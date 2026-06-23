@@ -1,12 +1,8 @@
-"use client";
-
 import Image from "next/image";
 import {
   Play,
-  Plus,
   ChevronRight,
   SkipBack,
-  ChevronLeft,
   SkipForward,
   Shuffle,
   Repeat,
@@ -14,11 +10,9 @@ import {
   ListMusic,
   Mic2,
   MoreVertical,
-  Star,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { useEffect, useState } from "react";
-
+import HeroCarousel from "@/components/home/hero-carousel";
 
 const featuredSoundtracks = [
   {
@@ -70,36 +64,36 @@ const tracks = [
   },
 ];
 
-const heroSlides = [
+const curatedCollections = [
   {
-    title: "THE NEON ODYSSEY",
+    title: "Grandeur & Time",
     description:
-      "Experience the BAFTA-winning score by Aris Thorne. A haunting blend of analog synthesis and orchestral grandiosity that redefines cinematic tension and futuristic storytelling through sound.",
-    composer: "Aris Thorne",
-    genre: "Sci-Fi Ambient",
-    audio: "Dolby Atmos",
+      "Monumental orchestral pieces and timeless cinematic compositions that shaped legendary storytelling.",
     image:
-      "https://lh3.googleusercontent.com/aida-public/AB6AXuCrBb9tBgdaYh_gWp4fqJLgxJ-De-y2-qaRsvI0Gw6OJrHWNyu3xKY0tPPxWf8v-nklISTdYFsFzz21xfYrfqylbODsIKYHqVGsZtt4zA7rJug731yCmNS_APpgt4_0qlHKTQb4ra8rDh4ganS1wdOnwBtsQtRExNRDExwHXi7YOOTG4x0GY9WOqtJ5Jyx60oP_k61eoM2Md0L3qn5iIHNpYW3hApshCW2WiIjqGTzm18Ur356wU0dbBynav-g-hgP5lFSZoKyNb4k",
+      "https://lh3.googleusercontent.com/aida-public/AB6AXuDBIs3R5te8457wLbJq7ZS5_nITEHvHyNtf9DA24y3CQ8EIBQ43ZiD8_8zitEHMzRfLz1uGCXPlW-e2t_QONM3cVdgWN000x9J5pGz-1vYwh-nOW3JdLrv22k318LmNOyWz_IB4OQk4bKgHT80ypreK5zjJT9kAOF-cevkmCV-QivAnoMlKm-TsCQbXItwWT2EUDE5ETXkwbgbO6gYEIgOD2yprxvXcoJOR9MJiPmTJ5zMbn9-iB3AXeP4N3BAOQsMe25iWnN_RfTI",
+    featured: true,
   },
   {
-    title: "SHADOWS OF ELYSIUM",
+    title: "Atmospheric Depth",
     description:
-      "An emotionally charged cinematic score layered with atmospheric strings, analog synth textures, and thunderous percussion.",
-    composer: "Lena Volaris",
-    genre: "Dark Orchestral",
-    audio: "Spatial Audio",
+      "Ethereal textures, ambient tension, and immersive sonic landscapes.",
     image:
-      "https://lh3.googleusercontent.com/aida-public/AB6AXuDiOME944kQk_JLg4nUWjS9Zmfi-WvKZGJULf_qGV_VjJ1dLeq2ktMPiBnr23R0XBNi2B55xoLNykx4RIrcknJjetkatRkBbkxEKqDXkLysyoapcWyXlckxE-Li_vw87FnxK-qa1AqfRpGq5j69Fhd5iT0GIpyrME6QmYcxEEbiYn07k-JSUairs5fHOn8IIxWCsvBZeidiKv17r05KEIoneksImjQ5ugNWNAK76Gmz4hzxzByOYCKg0CQonKr4__Hb3FJDmJToFdo",
+      "https://lh3.googleusercontent.com/aida-public/AB6AXuA-PAg-DxpVFxd6Oz2P4_UCRE37BWFahAdVB2KFuJurFbxfgbnCy9QRc7LiCFkdLQb8-99m7NdpLM77D2Ps5hGFJUzbra9FwbnbNGQ2rU3j-VPE8D7pizeZNL5wC-9Z5j6Y0hhVoRORxqz1I6Adh4k1lGwVfh3fqyeLqXClN2Evyd-eHqaxaoUzoXXTwWTI6FwJbD2s2ZRxtkmmaDFPui1E9Cs-xqo3onGdVFHkGPfNMve0JsVAH4yAiPGudI_8dU8Q-kjweij53d8",
   },
   {
-    title: "CELESTIAL HORIZON",
+    title: "Fantasy Epics",
     description:
-      "A soaring futuristic soundtrack blending choir harmonies, cinematic brass, and immersive ambient soundscapes.",
-    composer: "Kai Rutherford",
-    genre: "Epic Cinematic",
-    audio: "4K Audio",
+      "Heroic themes and mythical worlds brought to life through cinematic orchestration.",
     image:
       "https://lh3.googleusercontent.com/aida-public/AB6AXuBgUtLJGKzHBr0msYdnVnMmhAUtpaYqMnao6u_fGqFCLZVUwvr3aBNF5hC1wGTly-LdTn00jlyhEFdIe8SDXiPUGiK0s4_bvTBEQThnMXn0oZZ-vGtl1g61RxqIuoWgZBrG_X4KIzUE-qBi67OOZrDeg6QYRVuXuJk0bYf0uUCaVKT8aPsjCrmgHJS9CDBiNPvXHNmWwj8N3alIZRE4VL45d-oGG2yWMEgS0Mlmk1qcRwb_pr_7zPTVVBuGukogsHNferK-mHJVfTo",
+  },
+  {
+    title: "Classic Scores",
+    description:
+      "Legendary soundtracks that defined generations of cinema and continue to inspire filmmakers worldwide.",
+    image:
+      "https://lh3.googleusercontent.com/aida-public/AB6AXuDiOME944kQk_JLg4nUWjS9Zmfi-WvKZGJULf_qGV_VjJ1dLeq2ktMPiBnr23R0XBNi2B55xoLNykx4RIrcknJjetkatRkBbkxEKqDXkLysyoapcWyXlckxE-Li_vw87FnxK-qa1AqfRpGq5j69Fhd5iT0GIpyrME6QmYcxEEbiYn07k-JSUairs5fHOn8IIxWCsvBZeidiKv17r05KEIoneksImjQ5ugNWNAK76Gmz4hzxzByOYCKg0CQonKr4__Hb3FJDmJToFdo",
+    large: true,
   },
 ];
 
@@ -126,103 +120,7 @@ export default function HomePage() {
         </div>
       </nav>
       {/* HERO */}
-      <section className="relative overflow-hidden border-b border-border py-32">
-        {/* BACKGROUND EFFECT */}
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(120,120,120,0.12),transparent_55%)]" />
-
-        <div className="relative z-10 mx-auto grid max-w-7xl gap-16 px-6 lg:grid-cols-2 lg:items-center">
-          {/* LEFT SIDE IMAGE */}
-          <div className="group relative overflow-hidden rounded-[2rem] border border-border bg-card">
-            <div className="relative aspect-[4/5] w-full overflow-hidden">
-              <Image
-                src="https://lh3.googleusercontent.com/aida-public/AB6AXuCrBb9tBgdaYh_gWp4fqJLgxJ-De-y2-qaRsvI0Gw6OJrHWNyu3xKY0tPPxWf8v-nklISTdYFsFzz21xfYrfqylbODsIKYHqVGsZtt4zA7rJug731yCmNS_APpgt4_0qlHKTQb4ra8rDh4ganS1wdOnwBtsQtRExNRDExwHXi7YOOTG4x0GY9WOqtJ5Jyx60oP_k61eoM2Md0L3qn5iIHNpYW3hApshCW2WiIjqGTzm18Ur356wU0dbBynav-g-hgP5lFSZoKyNb4k"
-                alt="The Neon Odyssey"
-                fill
-                priority
-                className="object-cover transition duration-700 group-hover:scale-105"
-              />
-
-              <div className="absolute inset-0 bg-gradient-to-t from-background via-transparent to-transparent" />
-            </div>
-          </div>
-
-          {/* RIGHT SIDE CONTENT */}
-          <div className="flex flex-col justify-center">
-            <div className="mb-6 flex items-center gap-4">
-              <span className="rounded-md bg-primary px-3 py-1 text-xs font-bold tracking-widest text-primary-foreground">
-          ATMOS READY
-              </span>
-
-              <div className="flex items-center gap-2 text-xs tracking-widest text-primary">
-                <Star className="h-4 w-4 fill-current" />
-          FEATURED PRESENTATION
-              </div>
-            </div>
-
-            <h1 className="text-5xl font-black leading-none tracking-tight md:text-7xl xl:text-8xl">
-        THE NEON
-              <br />
-        ODYSSEY
-            </h1>
-
-            <p className="mt-8 max-w-2xl text-lg leading-8 text-muted-foreground">
-        Experience the BAFTA-winning score by Aris Thorne.
-        A haunting blend of analog synthesis and orchestral
-        grandiosity that redefines cinematic tension and
-        futuristic storytelling through sound.
-            </p>
-
-            {/* BUTTONS */}
-            <div className="mt-10 flex flex-wrap gap-4">
-              <Button className="h-14 rounded-2xl px-8">
-                <Play className="mr-2 h-5 w-5 fill-current" />
-          Start Listening
-              </Button>
-
-              <Button
-                variant="outline"
-                className="h-14 rounded-2xl border-border bg-accent/40 px-8 backdrop-blur-md hover:bg-accent"
-              >
-                <Plus className="mr-2 h-5 w-5" />
-          Save To Library
-              </Button>
-            </div>
-
-            {/* EXTRA INFO */}
-            <div className="mt-14 grid grid-cols-3 gap-6 border-t border-border pt-8">
-              <div>
-                <p className="text-xs tracking-widest text-muted-foreground">
-            COMPOSER
-                </p>
-
-                <p className="mt-2 font-semibold">
-            Aris Thorne
-                </p>
-              </div>
-
-              <div>
-                <p className="text-xs tracking-widest text-muted-foreground">
-            GENRE
-                </p>
-
-                <p className="mt-2 font-semibold">
-            Sci-Fi Ambient
-                </p>
-              </div>
-
-              <div>
-                <p className="text-xs tracking-widest text-muted-foreground">
-            AUDIO
-                </p>
-
-                <p className="mt-2 font-semibold">
-            Dolby Atmos
-                </p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
+      <HeroCarousel />
 
       {/* FEATURED */}
       <section className="mx-auto max-w-7xl px-6 py-24">
@@ -289,12 +187,12 @@ export default function HomePage() {
         </div>
 
         <div className="grid gap-6 lg:grid-cols-3">
-          {/* LEFT LARGE CARD */}
+          {/* FEATURED LEFT CARD */}
           <div className="group relative overflow-hidden rounded-3xl border border-border lg:row-span-2">
             <div className="relative h-full min-h-[640px] w-full">
               <Image
-                src="https://lh3.googleusercontent.com/aida-public/AB6AXuBo7UEmhK9k3A1xv1fT1vK7w7fD7xQx8n8j2J2z4M5tN4Q3m0R1r2P3e6F9zXv4B2Q6x7p9K1d3L5n7F8H2j4T6m9W0c1V3"
-                alt="Grandeur & Time"
+                src={curatedCollections[0].image}
+                alt={curatedCollections[0].title}
                 fill
                 className="object-cover transition duration-700 group-hover:scale-110"
               />
@@ -308,12 +206,11 @@ export default function HomePage() {
               </div>
 
               <h3 className="text-4xl font-black">
-          Grandeur & Time
+                {curatedCollections[0].title}
               </h3>
 
               <p className="mt-4 max-w-md leading-7 text-muted-foreground">
-          Monumental orchestral pieces and timeless cinematic
-          compositions that shaped legendary storytelling.
+                {curatedCollections[0].description}
               </p>
 
               <Button className="mt-6 rounded-full px-6">
@@ -323,102 +220,42 @@ export default function HomePage() {
             </div>
           </div>
 
-          {/* RIGHT SIDE */}
+          {/* RIGHT GRID */}
           <div className="grid gap-6 lg:col-span-2 lg:grid-cols-2">
-            {/* CARD 1 */}
-            <div className="group relative overflow-hidden rounded-3xl border border-border">
-              <div className="relative h-[310px] w-full">
-                <Image
-                  src="https://lh3.googleusercontent.com/aida-public/AB6AXuBz4K6x8M2j7T1p9W3n5Q6v8R1d4F7H0J2K9L5N8B3V6C1X4Z7A9S2D5F8G1H3J6K9L2M5N8P1Q4R7"
-                  alt="Atmospheric Depth"
-                  fill
-                  className="object-cover transition duration-700 group-hover:scale-110"
-                />
+            {curatedCollections.slice(1).map((collection) => (
+              <div
+                key={collection.title}
+                className={`group relative overflow-hidden rounded-3xl border border-border ${
+                  collection.large ? "lg:col-span-2" : ""
+                }`}
+              >
+                <div className="relative h-[310px] w-full">
+                  <Image
+                    src={collection.image}
+                    alt={collection.title}
+                    fill
+                    className="object-cover transition duration-700 group-hover:scale-110"
+                  />
 
-                <div className="absolute inset-0 bg-linear-to-t from-background via-background/20 to-transparent" />
-              </div>
-
-              <div className="absolute bottom-0 left-0 right-0 p-6">
-                <h3 className="text-2xl font-bold">
-            Atmospheric Depth
-                </h3>
-
-                <p className="mt-2 text-sm leading-6 text-muted-foreground">
-            Ethereal textures, ambient tension, and immersive sonic
-            landscapes.
-                </p>
-
-                <button className="mt-5 inline-flex items-center text-sm font-medium text-primary transition hover:opacity-80">
-            Listen To Collection
-                  <ChevronRight className="ml-1 h-4 w-4" />
-                </button>
-              </div>
-            </div>
-
-            {/* CARD 2 */}
-            <div className="group relative overflow-hidden rounded-3xl border border-border">
-              <div className="relative h-77.5 w-full">
-                <Image
-                  src="https://lh3.googleusercontent.com/aida-public/AB6AXuCq8W2E5R7T9Y1U3I5O7P9A2S4D6F8G1H3J5K7L9Z2X4C6V8B1N3M5Q7W9E2R4"
-                  alt="Fantasy Epics"
-                  fill
-                  className="object-cover transition duration-700 group-hover:scale-110"
-                />
-
-                <div className="absolute inset-0 bg-linear-to-t from-background via-background/20 to-transparent" />
-              </div>
-
-              <div className="absolute bottom-0 left-0 right-0 p-6">
-                <h3 className="text-2xl font-bold">
-            Fantasy Epics
-                </h3>
-
-                <p className="mt-2 text-sm leading-6 text-muted-foreground">
-            Heroic themes and mythical worlds brought to life through
-            cinematic orchestration.
-                </p>
-
-                <button className="mt-5 inline-flex items-center text-sm font-medium text-primary transition hover:opacity-80">
-            Listen To Collection
-                  <ChevronRight className="ml-1 h-4 w-4" />
-                </button>
-              </div>
-            </div>
-
-            {/* CARD 3 */}
-            <div className="group relative overflow-hidden rounded-3xl border border-border lg:col-span-2">
-              <div className="relative h-77.5 w-full">
-                <Image
-                  src="https://lh3.googleusercontent.com/aida-public/AB6AXuDk3N5M7B9V1C3X5Z7L9K2J4H6G8F1D3S5A7P9O2I4U6Y8T1R3E5W7Q9"
-                  alt="Classic Scores"
-                  fill
-                  className="object-cover transition duration-700 group-hover:scale-110"
-                />
-
-                <div className="absolute inset-0 bg-linear-to-r from-background via-background/30 to-transparent" />
-              </div>
-
-              <div className="absolute bottom-0 left-0 right-0 flex flex-col justify-between gap-6 p-8 md:flex-row md:items-end">
-                <div>
-                  <h3 className="text-3xl font-black">
-              Classic Scores
-                  </h3>
-
-                  <p className="mt-3 max-w-2xl leading-7 text-muted-foreground">
-              Legendary soundtracks that defined generations of cinema
-              and continue to inspire filmmakers worldwide.
-                  </p>
+                  <div className="absolute inset-0 bg-linear-to-t from-background via-background/20 to-transparent" />
                 </div>
 
-                <Button
-                  variant="outline"
-                  className="rounded-full border-border bg-background/60 backdrop-blur-md hover:bg-accent"
-                >
-                  <Play className="mr-2 h-4 w-4 fill-current" />
-            Listen To Collection
-                </Button>
+                <div className="absolute bottom-0 left-0 right-0 p-6">
+                  <h3 className="text-2xl font-bold">
+                    {collection.title}
+                  </h3>
+
+                  <p className="mt-2 text-sm leading-6 text-muted-foreground">
+                    {collection.description}
+                  </p>
+
+                  <button className="mt-5 inline-flex items-center text-sm font-medium text-primary transition hover:opacity-80">
+              Listen To Collection
+                    <ChevronRight className="ml-1 h-4 w-4" />
+                  </button>
+                </div>
               </div>
-            </div>
+            ))}
           </div>
         </div>
       </section>
