@@ -9,7 +9,7 @@ const curatedCollections = [
     description:
       "Monumental orchestral pieces and timeless cinematic compositions that shaped legendary storytelling.",
     image:
-      "https://lh3.googleusercontent.com/aida-public/AB6AXuDBIs3R5te8457wLbJq7ZS5_nITEHvHyNtf9DA24y3CQ8EIBQ43ZiD8_8zitEHMzRfLz1uGCXPlW-e2t_QONM3cVdgWN000x9J5pGz-1vYwh-nOW3JdLrv22k318LmNOyWz_IB4OQk4bKgHT80ypreK5zjJT9kAOF-cevkmCV-QivAnoMlKm-TsCQbXItwWT2EUDE5ETXkwbgbO6gYEIgOD2yprxvXcoJOR9MJiPmTJ5zMbn9-iB3AXeP4N3BAOQsMe25iWnN_RfTI",
+      "/images/grandeur-time.png",
     featured: true,
   },
   {
@@ -17,14 +17,14 @@ const curatedCollections = [
     description:
       "Ethereal textures, ambient tension, and immersive sonic landscapes.",
     image:
-      "https://lh3.googleusercontent.com/aida-public/AB6AXuA-PAg-DxpVFxd6Oz2P4_UCRE37BWFahAdVB2KFuJurFbxfgbnCy9QRc7LiCFkdLQb8-99m7NdpLM77D2Ps5hGFJUzbra9FwbnbNGQ2rU3j-VPE8D7pizeZNL5wC-9Z5j6Y0hhVoRORxqz1I6Adh4k1lGwVfh3fqyeLqXClN2Evyd-eHqaxaoUzoXXTwWTI6FwJbD2s2ZRxtkmmaDFPui1E9Cs-xqo3onGdVFHkGPfNMve0JsVAH4yAiPGudI_8dU8Q-kjweij53d8",
+      "/images/atmospheric-depth.png",
   },
   {
     title: "Fantasy Epics",
     description:
       "Heroic themes and mythical worlds brought to life through cinematic orchestration.",
     image:
-      "https://lh3.googleusercontent.com/aida-public/AB6AXuBgUtLJGKzHBr0msYdnVnMmhAUtpaYqMnao6u_fGqFCLZVUwvr3aBNF5hC1wGTly-LdTn00jlyhEFdIe8SDXiPUGiK0s4_bvTBEQThnMXn0oZZ-vGtl1g61RxqIuoWgZBrG_X4KIzUE-qBi67OOZrDeg6QYRVuXuJk0bYf0uUCaVKT8aPsjCrmgHJS9CDBiNPvXHNmWwj8N3alIZRE4VL45d-oGG2yWMEgS0Mlmk1qcRwb_pr_7zPTVVBuGukogsHNferK-mHJVfTo",
+      "/images/fantasy-epics.png",
   },
   {
     title: "Classic Scores",
