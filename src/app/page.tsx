@@ -1,65 +1,134 @@
 import Image from "next/image";
+import {
+  Play,
+  SkipBack,
+  SkipForward,
+  Shuffle,
+  Repeat,
+  Volume2,
+  ListMusic,
+  Mic2,
+} from "lucide-react";
+import { Button } from "@/components/ui/button";
+import HeroCarousel from "@/components/home/hero-carousel";
+import FeaturedSoundtracks from "@/components/home/featured-tracks";
+import CuratedCollections from "@/components/home/collections";
+import TracksSection from "@/components/home/tracks";
+import {
+  SignInButton,
+  SignUpButton,
+  Show,
+  UserButton,
+} from "@clerk/nextjs";
 
-export default function Home() {
+export default function HomePage() {
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
+    <main className="min-h-screen bg-background text-foreground">
+      {/* NAVBAR */}
+      <nav className="fixed top-0 z-50 w-full border-b border-border bg-background/80 backdrop-blur-xl">
+        <div className="mx-auto flex h-20 max-w-7xl items-center justify-between px-6">
+          <div className="flex items-center gap-12">
+            <h1 className="text-3xl font-black tracking-tight text-primary">
+              Cinematic
+            </h1>
+          </div>
+
+          <div className="flex items-center gap-4">
+
+            <Show when="signed-out">
+              <SignInButton mode="modal">
+                <Button variant="ghost">Sign In</Button>
+              </SignInButton>
+
+              <SignUpButton mode="modal">
+                <Button className="rounded-full px-6">Sign Up</Button>
+              </SignUpButton>
+            </Show>
+
+            <Show when="signed-in">
+              <UserButton />
+            </Show>
+
+            {/* <Button variant="ghost">Sign In</Button>
+
+            <Button className="rounded-full px-6">
+              Sign Up
+            </Button> */}
+          </div>
         </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
+      </nav>
+      {/* HERO */}
+      <HeroCarousel />
+
+      {/* FEATURED */}
+      <FeaturedSoundtracks />
+
+      {/* CURATED COLLECTIONS */}
+      <CuratedCollections />
+
+      {/* TRACKS */}
+      <TracksSection />
+
+      PLAYER
+      <div className="fixed bottom-0 left-0 right-0 z-50 border-t border-border bg-background/90 backdrop-blur-xl">
+        <div className="flex h-24 items-center justify-between px-6">
+          <div className="flex w-1/3 items-center gap-4">
+            <div className="relative h-14 w-14 overflow-hidden rounded-xl">
+              <Image
+                src="https://lh3.googleusercontent.com/aida-public/AB6AXuDFeD7QHBj_E_w-PPS9PG1-s1EpGY7I7yx5LZVn7DauM4j76zuujyME-uLdnislaKL3WKZryFVOnDzCbaDLL_VpS-gzYcHi0ynWhvKkg8yGHclM9AyGapZQ-xny-JH5wR2FKKvIdGEk-C9Jn60eP7Mfi9p_MGtygWT1cWiJhoY-FiUqKqu232_TnVSSM5owNDpX4ZeSEpCf57f4IB2WsJyQUFHyc2Re3X8L8RzhL1ZPAVYtpIeN3O_BredLg05MOVYm5ydxBW6LZ74"
+                alt="Now Playing"
+                fill
+                className="object-cover"
+              />
+            </div>
+
+            <div>
+              <p className="font-medium text-primary">
+                The Neon Odyssey
+              </p>
+
+              <p className="text-xs text-muted-foreground">
+                Aris Thorne
+              </p>
+            </div>
+          </div>
+
+          <div className="flex w-1/3 flex-col items-center gap-3">
+            <div className="flex items-center gap-6">
+              <Shuffle className="h-4 w-4 text-muted-foreground" />
+              <SkipBack className="h-5 w-5 text-muted-foreground" />
+
+              <Button
+                size="icon"
+                className="rounded-full"
+              >
+                <Play className="h-5 w-5 fill-current" />
+              </Button>
+
+              <SkipForward className="h-5 w-5 text-muted-foreground" />
+              <Repeat className="h-4 w-4 text-muted-foreground" />
+            </div>
+
+            <div className="h-1 w-full max-w-md rounded-full bg-muted">
+              <div className="h-1 w-1/3 rounded-full bg-primary" />
+            </div>
+          </div>
+
+          <div className="flex w-1/3 items-center justify-end gap-5">
+            <Mic2 className="h-5 w-5 text-muted-foreground" />
+
+            <ListMusic className="h-5 w-5 text-muted-foreground" />
+
+            <div className="flex items-center gap-2">
+              <Volume2 className="h-4 w-4 text-muted-foreground" />
+
+              <div className="h-1 w-24 rounded-full bg-muted">
+                <div className="h-1 w-2/3 rounded-full bg-primary" />
+              </div>
+            </div>
+          </div>
         </div>
-      </main>
-    </div>
+      </div>
+    </main>
   );
 }
