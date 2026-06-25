@@ -14,6 +14,12 @@ import HeroCarousel from "@/components/home/hero-carousel";
 import FeaturedSoundtracks from "@/components/home/featured-tracks";
 import CuratedCollections from "@/components/home/collections";
 import TracksSection from "@/components/home/tracks";
+import {
+  SignInButton,
+  SignUpButton,
+  Show,
+  UserButton,
+} from "@clerk/nextjs";
 
 export default function HomePage() {
   return (
@@ -29,11 +35,25 @@ export default function HomePage() {
 
           <div className="flex items-center gap-4">
 
-            <Button variant="ghost">Sign In</Button>
+            <Show when="signed-out">
+              <SignInButton mode="modal">
+                <Button variant="ghost">Sign In</Button>
+              </SignInButton>
+
+              <SignUpButton mode="modal">
+                <Button className="rounded-full px-6">Sign Up</Button>
+              </SignUpButton>
+            </Show>
+
+            <Show when="signed-in">
+              <UserButton />
+            </Show>
+
+            {/* <Button variant="ghost">Sign In</Button>
 
             <Button className="rounded-full px-6">
               Sign Up
-            </Button>
+            </Button> */}
           </div>
         </div>
       </nav>
