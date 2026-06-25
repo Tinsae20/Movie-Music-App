@@ -36,11 +36,11 @@ export default function HomePage() {
           <div className="flex items-center gap-4">
 
             <Show when="signed-out">
-              <SignInButton mode="modal">
+              <SignInButton mode="modal" forceRedirectUrl="/dashboard">
                 <Button variant="ghost">Sign In</Button>
               </SignInButton>
 
-              <SignUpButton mode="modal">
+              <SignUpButton mode="modal" forceRedirectUrl="/dashboard">
                 <Button className="rounded-full px-6">Sign Up</Button>
               </SignUpButton>
             </Show>
