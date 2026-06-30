@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import { Elms_Sans } from "next/font/google";
 import { ClerkProvider } from "@clerk/nextjs";
 import "./globals.css";
+import QueryProvider from "@/components/providers/QueryProvider";
+import { ThemeProvider } from "next-themes";
 
 const elmsSans = Elms_Sans({
   subsets: ["latin"],
@@ -23,9 +25,14 @@ export default function RootLayout({
     <html
       lang="en"
       className={`${elmsSans.className} h-full antialiased`}
+      suppressHydrationWarning
     >
-      <body className="min-h-full flex flex-col">
-        <ClerkProvider>{children}</ClerkProvider>
+      <body>
+        <ClerkProvider>
+          <ThemeProvider attribute="class" defaultTheme="dark">
+            <QueryProvider>{children}</QueryProvider>
+          </ThemeProvider>
+        </ClerkProvider>
       </body>
     </html>
   );

@@ -20,8 +20,16 @@ import {
   Show,
   UserButton,
 } from "@clerk/nextjs";
+import { auth } from "@clerk/nextjs/server";
+import { redirect } from "next/navigation";
 
-export default function HomePage() {
+export default async function HomePage() {
+  const { userId } = await auth();
+
+  if (userId) {
+    redirect("/discover");
+  }
+
   return (
     <main className="min-h-screen bg-background text-foreground">
       {/* NAVBAR */}
@@ -36,11 +44,11 @@ export default function HomePage() {
           <div className="flex items-center gap-4">
 
             <Show when="signed-out">
-              <SignInButton mode="modal">
+              <SignInButton mode="modal" forceRedirectUrl="/discover">
                 <Button variant="ghost">Sign In</Button>
               </SignInButton>
 
-              <SignUpButton mode="modal">
+              <SignUpButton mode="modal" forceRedirectUrl="/discover">
                 <Button className="rounded-full px-6">Sign Up</Button>
               </SignUpButton>
             </Show>
@@ -69,7 +77,7 @@ export default function HomePage() {
       {/* TRACKS */}
       <TracksSection />
 
-      PLAYER
+      {/* PLAYER */}
       <div className="fixed bottom-0 left-0 right-0 z-50 border-t border-border bg-background/90 backdrop-blur-xl">
         <div className="flex h-24 items-center justify-between px-6">
           <div className="flex w-1/3 items-center gap-4">
