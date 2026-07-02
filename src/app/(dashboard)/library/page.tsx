@@ -6,6 +6,8 @@ import PlaylistCard from "@/components/music/PlaylistCard";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import type { Playlist, Song } from "@/lib/types";
 
+export const revalidate = 0; // always fetch fresh data
+
 type PlaylistSongRelation = {
   song: Song | null;
 };
