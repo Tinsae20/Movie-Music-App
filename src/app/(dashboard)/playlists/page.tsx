@@ -2,24 +2,19 @@ import { auth } from "@clerk/nextjs/server";
 import { createClient } from "@/lib/supabase/server";
 import PlaylistCard from "@/components/music/PlaylistCard";
 import type { Playlist, Song } from "@/lib/types";
+
 type PlaylistSongRelation = {
   song: Song | null;
 };
 
-type PlaylistWithRelations = Playlist & {
+type PlaylistWithRelations = Omit<Playlist, "songs"> & {
   playlist_songs?: PlaylistSongRelation[];
-};
-
-type PlaylistWithSongs = Playlist & {
-  songs: Song[];
 };
 
 export default async function PlaylistsPage() {
   const { userId } = await auth();
   const supabase = createClient();
 
-  // Two separate queries rather than one OR-filter: keeps RLS doing the
-  // access-control work per table rather than re-deriving it client-side.
   const [{ data: ownPlaylists }, { data: moviePlaylists }] = await Promise.all([
     userId
       ? (await supabase)
@@ -35,32 +30,40 @@ export default async function PlaylistsPage() {
       .order("name"),
   ]);
 
-  // Normalize the nested `playlist_songs(song:songs(*))` shape into the
-  // flatter `songs: Song[]` shape that PlaylistCard expects (Section 11).
-  const normalize = (
-    rows: PlaylistWithRelations[] | null,
-  ): PlaylistWithSongs[] =>
+  const normalize = (rows: PlaylistWithRelations[] | null): Playlist[] =>
     (rows ?? []).map((playlist) => ({
       ...playlist,
-
-      songs:
-        playlist.playlist_songs
-          ?.map((relation) => relation.song)
-          .filter(
-            (song): song is Song => song !== null,
-          ) ?? [],
+      songs: playlist.playlist_songs
+        ?.map((r) => r.song)
+        .filter((s): s is Song => s !== null) ?? [],
     }));
 
-  const yourPlaylists = normalize(ownPlaylists);
-  const movieSoundtracks = normalize(moviePlaylists);
+  const yourPlaylists = normalize(ownPlaylists as PlaylistWithRelations[] | null);
+  const movieSoundtracks = normalize(moviePlaylists as PlaylistWithRelations[] | null);
+
+  const favorites = yourPlaylists.filter((p) => p.type === "favorites");
+  const custom = yourPlaylists.filter((p) => p.type === "custom");
 
   return (
     <div className="p-6 space-y-10">
-      {yourPlaylists.length > 0 && (
+      <h1 className="text-2xl font-bold">Playlists</h1>
+
+      {favorites.length > 0 && (
         <section>
-          <h2 className="text-xl font-semibold mb-4">Your Playlists</h2>
+          <h2 className="text-lg font-semibold mb-4">Favorites</h2>
           <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-4">
-            {yourPlaylists.map((p) => (
+            {favorites.map((p) => (
+              <PlaylistCard key={p.id} playlist={p} />
+            ))}
+          </div>
+        </section>
+      )}
+
+      {custom.length > 0 && (
+        <section>
+          <h2 className="text-lg font-semibold mb-4">Your Playlists</h2>
+          <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-4">
+            {custom.map((p) => (
               <PlaylistCard key={p.id} playlist={p} />
             ))}
           </div>
@@ -68,12 +71,15 @@ export default async function PlaylistsPage() {
       )}
 
       <section>
-        <h2 className="text-xl font-semibold mb-4">Movie Soundtracks</h2>
+        <h2 className="text-lg font-semibold mb-4">Movie Soundtracks</h2>
         <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-4">
           {movieSoundtracks.map((p) => (
             <PlaylistCard key={p.id} playlist={p} />
           ))}
         </div>
+        {movieSoundtracks.length === 0 && (
+          <p className="text-muted-foreground text-sm">No soundtracks found.</p>
+        )}
       </section>
     </div>
   );
