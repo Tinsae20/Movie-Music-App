@@ -1,6 +1,10 @@
 import { createClient } from "@/lib/supabase/server";
 import CollectionCard from "@/components/music/CollectionCard";
 import type { Collection, Playlist } from "@/lib/types";
+import { auth } from "@clerk/nextjs/server";
+import CreateCollectionDialog from "@/components/music/CreateCollectionDialog";
+
+export const revalidate = 0;
 
 type CollectionPlaylistRelation = {
   playlist: Playlist | null;
@@ -15,6 +19,7 @@ type CollectionWithPlaylists = Collection & {
 };
 
 export default async function CollectionsPage() {
+  const { userId } = await auth();
   const supabase = createClient();
   const { data: collections, error } = await (await supabase)
     .from("collections")
@@ -44,7 +49,10 @@ export default async function CollectionsPage() {
 
   return (
     <div className="p-6">
-      <h1 className="text-2xl font-bold mb-6">Collections</h1>
+      <div className="flex items-center justify-between mb-6">
+        <h1 className="text-2xl font-bold">Collections</h1>
+        {userId && <CreateCollectionDialog />}
+      </div>
       <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
         {normalized.map((collection) => (
           <CollectionCard key={collection.id} collection={collection} />
@@ -53,3 +61,4 @@ export default async function CollectionsPage() {
     </div>
   );
 }
+
