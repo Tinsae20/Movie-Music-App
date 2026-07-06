@@ -1,30 +1,44 @@
 "use client";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { createClient } from "@/lib/supabase/client";
-import { useUser } from "@clerk/nextjs";
+import { createClient, createAuthClient } from "@/lib/supabase/client";
+import { useUser, useAuth } from "@clerk/nextjs";
+import type { SupabaseClient } from "@supabase/supabase-js";
+
+type GetTokenFn = (options?: { template?: string }) => Promise<string | null>;
+
+async function getAuthenticatedClient(getToken: GetTokenFn): Promise<SupabaseClient> {
+  const token = await getToken({ template: "supabase" });
+
+  if (token) {
+    const payload = JSON.parse(atob(token.split(".")[1])) as Record<string, unknown>;
+    console.log("JWT payload:", payload);
+  }
+
+  return token ? createAuthClient(token) : createClient();
+}
 
 // ─── Song Favorites ────────────────────────────────────────────────────────
 
 export function useFavoriteSong(songId: string) {
   const { user } = useUser();
-  const supabase = createClient();
+  const { getToken } = useAuth();
   const qc = useQueryClient();
 
   const { data: isFav = false } = useQuery({
     queryKey: ["favorite-song", songId, user?.id],
     queryFn: async () => {
-      const { data } = await supabase
+      const client = await getAuthenticatedClient(getToken);
+      const { data } = await client
         .from("favorites")
         .select("id")
         .eq("song_id", songId)
-        .maybeSingle(); // avoids throwing when row doesn't exist
+        .maybeSingle();
       return !!data;
     },
     enabled: !!user,
   });
 
   const toggle = useMutation({
-    // Flip the heart immediately before the server responds
     onMutate: async () => {
       await qc.cancelQueries({ queryKey: ["favorite-song", songId, user?.id] });
       const previous = qc.getQueryData(["favorite-song", songId, user?.id]);
@@ -32,42 +46,41 @@ export function useFavoriteSong(songId: string) {
       return { previous };
     },
     mutationFn: async () => {
+      // Get authenticated client once and reuse across all operations
+      const client = await getAuthenticatedClient(getToken);
+
       if (isFav) {
-        // Remove from favorites table
-        await supabase
+        await client
           .from("favorites")
           .delete()
           .eq("song_id", songId);
 
-        // Also remove from the user's Favorites playlist
-        const { data: favPlaylist } = await supabase
+        const { data: favPlaylist } = await client
           .from("playlists")
           .select("id")
           .eq("type", "favorites")
           .maybeSingle();
 
         if (favPlaylist) {
-          await supabase
+          await client
             .from("playlist_songs")
             .delete()
             .eq("playlist_id", favPlaylist.id)
             .eq("song_id", songId);
         }
       } else {
-        // Add to favorites table
-        await supabase
+        await client
           .from("favorites")
           .insert({ song_id: songId });
 
-        // Also add to the user's Favorites playlist
-        const { data: favPlaylist } = await supabase
+        const { data: favPlaylist } = await client
           .from("playlists")
           .select("id")
           .eq("type", "favorites")
           .maybeSingle();
 
         if (favPlaylist) {
-          const { data: lastPos } = await supabase
+          const { data: lastPos } = await client
             .from("playlist_songs")
             .select("position")
             .eq("playlist_id", favPlaylist.id)
@@ -75,7 +88,7 @@ export function useFavoriteSong(songId: string) {
             .limit(1)
             .maybeSingle();
 
-          await supabase
+          await client
             .from("playlist_songs")
             .insert({
               playlist_id: favPlaylist.id,
@@ -85,7 +98,6 @@ export function useFavoriteSong(songId: string) {
         }
       }
     },
-    // Roll back optimistic update on error
     onError: (_err, _vars, context) => {
       if (context?.previous !== undefined) {
         qc.setQueryData(["favorite-song", songId, user?.id], context.previous);
@@ -104,13 +116,14 @@ export function useFavoriteSong(songId: string) {
 
 export function useFavoritePlaylist(playlistId: string) {
   const { user } = useUser();
-  const supabase = createClient();
+  const { getToken } = useAuth();
   const qc = useQueryClient();
 
   const { data: isFav = false } = useQuery({
     queryKey: ["favorite-playlist", playlistId, user?.id],
     queryFn: async () => {
-      const { data } = await supabase
+      const client = await getAuthenticatedClient(getToken);
+      const { data } = await client
         .from("favorites")
         .select("id")
         .eq("playlist_id", playlistId)
@@ -128,13 +141,15 @@ export function useFavoritePlaylist(playlistId: string) {
       return { previous };
     },
     mutationFn: async () => {
+      const client = await getAuthenticatedClient(getToken);
+
       if (isFav) {
-        await supabase
+        await client
           .from("favorites")
           .delete()
           .eq("playlist_id", playlistId);
       } else {
-        await supabase
+        await client
           .from("favorites")
           .insert({ playlist_id: playlistId });
       }
