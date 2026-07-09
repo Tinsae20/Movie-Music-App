@@ -182,7 +182,7 @@ export default function CreateCollectionDialog() {
     <>
       <button
         onClick={handleOpen}
-        className="flex items-center gap-2 px-4 py-2 text-sm font-semibold text-white rounded-lg bg-linear-to-r from-violet-600 to-indigo-600 hover:from-violet-500 hover:to-indigo-500 shadow-md shadow-indigo-500/20 active:scale-95 transition-all duration-200 cursor-pointer"
+        className="flex items-center gap-2 px-4 py-2 text-sm font-semibold text-primary-foreground rounded-lg bg-primary hover:bg-primary/90 shadow-md shadow-primary/20 active:scale-95 transition-all duration-200 cursor-pointer"
       >
         <Plus size={16} />
         Create Collection
@@ -230,7 +230,7 @@ export default function CreateCollectionDialog() {
                     value={title}
                     onChange={(e) => setTitle(e.target.value)}
                     placeholder="e.g. 90s Blockbusters, Epic Orchestras"
-                    className="w-full px-3.5 py-2 rounded-lg border border-border/80 bg-background/50 focus:outline-hidden focus:ring-2 focus:ring-indigo-500/50 focus:border-indigo-500 transition-all text-sm"
+                    className="w-full px-3.5 py-2 rounded-lg border border-border/80 bg-background/50 focus:outline-hidden focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all text-sm"
                   />
                 </div>
 
@@ -245,7 +245,7 @@ export default function CreateCollectionDialog() {
                     onChange={(e) => setDescription(e.target.value)}
                     placeholder="Summarize the theme, style, or feeling of this collection..."
                     rows={3}
-                    className="w-full px-3.5 py-2 rounded-lg border border-border/80 bg-background/50 focus:outline-hidden focus:ring-2 focus:ring-indigo-500/50 focus:border-indigo-500 transition-all text-sm resize-none"
+                    className="w-full px-3.5 py-2 rounded-lg border border-border/80 bg-background/50 focus:outline-hidden focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all text-sm resize-none"
                   />
                 </div>
 
@@ -259,7 +259,7 @@ export default function CreateCollectionDialog() {
                     <button
                       type="button"
                       onClick={selectRandomCover}
-                      className="text-xs text-indigo-500 hover:text-indigo-400 font-semibold flex items-center gap-1 active:scale-95 transition-transform"
+                      className="text-xs text-primary hover:opacity-80 font-semibold flex items-center gap-1 active:scale-95 transition-transform"
                     >
                       <Sparkles size={12} />
                       Random Artwork
@@ -271,7 +271,7 @@ export default function CreateCollectionDialog() {
                     value={coverUrl}
                     onChange={(e) => setCoverUrl(e.target.value)}
                     placeholder="https://images.unsplash.com/..."
-                    className="w-full px-3.5 py-2 rounded-lg border border-border/80 bg-background/50 focus:outline-hidden focus:ring-2 focus:ring-indigo-500/50 focus:border-indigo-500 transition-all text-sm"
+                    className="w-full px-3.5 py-2 rounded-lg border border-border/80 bg-background/50 focus:outline-hidden focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all text-sm"
                   />
                   {coverUrl && (
                     <div className="mt-2 relative w-32 aspect-2/1 rounded-lg overflow-hidden border">
@@ -294,7 +294,7 @@ export default function CreateCollectionDialog() {
                         setTheme(e.target.value);
                         if (e.target.value !== "custom") {setCustomTheme("");}
                       }}
-                      className="w-full px-3.5 py-2 rounded-lg border border-border/80 bg-background/50 focus:outline-hidden focus:ring-2 focus:ring-indigo-500/50 focus:border-indigo-500 transition-all text-sm"
+                      className="w-full px-3.5 py-2 rounded-lg border border-border/80 bg-background/50 focus:outline-hidden focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all text-sm"
                     >
                       <option value="">No Theme</option>
                       {PRESET_THEMES.map((preset) => (
@@ -318,7 +318,7 @@ export default function CreateCollectionDialog() {
                         value={customTheme}
                         onChange={(e) => setCustomTheme(e.target.value)}
                         placeholder="e.g. sci-fi, cyberpunk"
-                        className="w-full px-3.5 py-2 rounded-lg border border-border/80 bg-background/50 focus:outline-hidden focus:ring-2 focus:ring-indigo-500/50 focus:border-indigo-500 transition-all text-sm"
+                        className="w-full px-3.5 py-2 rounded-lg border border-border/80 bg-background/50 focus:outline-hidden focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all text-sm"
                       />
                     </div>
                   )}
@@ -355,12 +355,12 @@ export default function CreateCollectionDialog() {
                               key={playlist.id}
                               onClick={() => togglePlaylistSelection(playlist.id)}
                               className={`w-full flex items-center justify-between px-4 py-2.5 hover:bg-secondary/40 transition-colors text-left ${
-                                isChecked ? "bg-indigo-500/5" : ""
+                                isChecked ? "bg-primary/5" : ""
                               }`}
                             >
                               <div className="flex items-center gap-3">
                                 <div className={`flex h-4 w-4 items-center justify-center rounded-sm border border-primary transition-all ${
-                                  isChecked ? "bg-indigo-600 border-indigo-600 text-white" : "border-muted-foreground/50"
+                                  isChecked ? "bg-primary border-primary text-primary-foreground" : "border-muted-foreground/50"
                                 }`}>
                                   {isChecked && <Check size={10} strokeWidth={3} />}
                                 </div>
@@ -395,7 +395,7 @@ export default function CreateCollectionDialog() {
                 <button
                   type="submit"
                   disabled={isSubmitting || !title.trim() || selectedPlaylists.length === 0}
-                  className="flex items-center gap-2 px-5 py-2 text-sm font-semibold text-white rounded-lg bg-indigo-600 hover:bg-indigo-500 disabled:opacity-50 active:scale-95 transition-all shadow-md shadow-indigo-500/10"
+                  className="flex items-center gap-2 px-5 py-2 text-sm font-semibold text-primary-foreground rounded-lg bg-primary hover:bg-primary/90 disabled:opacity-50 active:scale-95 transition-all shadow-md shadow-primary/10"
                 >
                   {isSubmitting ? (
                     <>
